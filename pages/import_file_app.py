@@ -1,5 +1,5 @@
 import pandas as pd
-from def_package import all
+from package import all
 import streamlit as st
 from io import BytesIO
 
