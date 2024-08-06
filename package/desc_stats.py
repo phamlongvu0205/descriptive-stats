@@ -95,7 +95,7 @@ class all:
                 with st.expander(f'Nhập dữ liệu cho cột {j+1}'):
                     for i in range(rows):
                         if j == 0:
-                            data.iloc[i, j] = st.number_input(f'Nhập giá trị tại hàng {i+1}, cột {j+1}:', key=f'{i}_{j}')
+                            data.iloc[i, j] = st.number_input(f'Nhập giá trị tại hàng {i+1}, cột {j+1}:', key=f'{i}_{j}', min_value=0)
                         else:
                             data.iloc[i, j] = st.number_input(f'Nhập tần suất tại hàng {i+1}, cột {j+1}:', key=f'{i}_{j}', min_value=0)
         
