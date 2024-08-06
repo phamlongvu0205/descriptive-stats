@@ -1,5 +1,5 @@
 import pandas as pd
-from package import all
+from package.desc_stats import all
 import streamlit as st
 
 file_path = "raw_data/raw_data.xlsx"
