@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
 # import scipy as sc
-import statistics
-from scipy import stats
-from scipy.stats import gmean, hmean
+# import statistics
+# from scipy import stats
+# from scipy.stats import gmean, hmean
 import streamlit as st
 
 class all:
