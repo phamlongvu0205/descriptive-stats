@@ -127,5 +127,10 @@ class all:
             # Tạo DataFrame từ danh sách kết quả thống kê
             stats_df = pd.DataFrame(stats_results).set_index('column')
             st.write(stats_df.T)
-            
-        return data
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write(data)
+        with col2:
+            st.write(stats_df.T)   
+        return
