@@ -5,13 +5,13 @@ from pages import single_data
 st.set_page_config(layout='wide', initial_sidebar_state='expanded', )
 
 single_data = st.Page(
-    page = "pages/frequency_data.py",
+    page = "pages/single_data.py",
     title = "Single Data",
     default=True
 )
 
 multiple_data = st.Page(
-    page = "pages/multiple_frequency_data.py",
+    page = "pages/multiple_data.py",
     title = "Multiple Data"
 )
 
