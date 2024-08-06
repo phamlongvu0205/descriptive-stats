@@ -1,3 +1,2 @@
 streamlit
-pages
-scipy==1.14.0
+scipy=>1.13.1
