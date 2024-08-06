@@ -4,7 +4,7 @@
 __author__ = "Pham Long Vu @phamlongvu0205 in GitHub"
 
 from desc_stats import all
-
+from .plot_stats import *
 __all__ = [
     'plot_stats',
     'all',
