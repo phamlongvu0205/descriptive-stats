@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from package import *
+from package import all
 st.sidebar.success('Select a page above.')
 
 multiple_data = all.multiple_data()
