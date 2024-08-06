@@ -70,75 +70,66 @@ class all:
         
     @staticmethod    
     def multiple_data():
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        # Create input to enter the number of columns
-        cols = st.number_input('Nhập số cột:', min_value=2, value=2, max_value=5)  # Increased max_value for more columns
+        col1, col2 = st.columns(2)
         
-    with col2:
-        # Create input to enter the number of rows
-        rows = st.number_input('Nhập số dòng:', min_value=2, value=2)
-        
-    # Create column names: first column is "Giá trị", subsequent columns are "Tần suất"
-    column_names = ['Giá trị'] + [f'Tần suất {i+1}' for i in range(cols-1)]
-    
-    # Create empty DataFrame with column names
-    data = pd.DataFrame(index=range(rows), columns=column_names)
-    
-    # Create columns on the interface
-    columns = st.columns(cols)
-    
-    # Display inputs to enter data into DataFrame for each column
-    for j in range(cols):
-        with columns[j]:
-            with st.expander(f'Nhập dữ liệu cho cột {j+1}'):
-                for i in range(rows):
-                    if j == 0:
-                        data.iloc[i, j] = st.number_input(f'Nhập giá trị tại hàng {i+1}, cột {j+1}:', key=f'{i}_{j}', min_value=0)
-                    else:
-                        data.iloc[i, j] = st.number_input(f'Nhập tần suất tại hàng {i+1}, cột {j+1}:', key=f'{i}_{j}', min_value=0)
-    
-    # Tạo danh sách để lưu kết quả phân tách theo từng cột
-    expanded_lists = {col: [] for col in column_names[1:]}
-    
-    # Lặp qua từng hàng trong DataFrame
-    for index, row in data.iterrows():
-        
-        # Lặp qua các cột tần suất
-        for col in column_names[1:]:  # Bỏ qua cột đầu tiên "Giá trị"
+        with col1:
+            # Create input to enter the number of columns
+            cols = st.number_input('Nhập số cột:', min_value=2, value=2, max_value=5)  # Increased max_value for more columns
             
-            # Chỉ mở rộng danh sách nếu giá trị tần suất không phải NaN và là số nguyên không âm
-            if pd.notna(row[col]) and row[col] > 0:
-                expanded_lists[col].extend([row['Giá trị']] * int(row[col]))
-                
-    # Initialize stats_df to avoid UnboundLocalError
-    stats_df = pd.DataFrame()
-    
-    # Kiểm tra xem có bất kỳ danh sách nào không rỗng
-    if any(expanded_lists.values()):
-        expanded_df = pd.concat({col: pd.Series(expanded_list) for col, expanded_list in expanded_lists.items()}, axis=1)
-
-        # Tính toán thống kê mô tả cho từng cột và lưu kết quả vào danh sách
-        stats_results = []
+        with col2:
+            # Create input to enter the number of rows
+            rows = st.number_input('Nhập số dòng:', min_value=2, value=2)
+            
+        # Create column names: first column is "Giá trị", subsequent columns are "Tần suất"
+        column_names = ['Giá trị'] + [f'Tần suất {i+1}' for i in range(cols-1)]
         
-        for col in expanded_df.columns:
-            stats_result = all.descriptive_stats(expanded_df[col])
-            stats_result['column'] = col  # Thêm tên cột vào kết quả
-            stats_results.append(stats_result)
-    
-        # Tạo DataFrame từ danh sách kết quả thống kê
-        stats_df = pd.DataFrame(stats_results).set_index('column')
-    else:
-        st.warning("Chưa có dữ liệu để tính toán thống kê mô tả.")
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        st.write(data)
-    with col2:
-        if not stats_df.empty:
-            st.write(stats_df.T)
-        else:
-            st.write("Không có kết quả thống kê để hiển thị.")
-    
-    return
+        # Create empty DataFrame with column names
+        data = pd.DataFrame(index=range(rows), columns=column_names)
+        
+        # Create columns on the interface
+        columns = st.columns(cols)
+        
+        # Display inputs to enter data into DataFrame for each column
+        for j in range(cols):
+            with columns[j]:
+                with st.expander(f'Nhập dữ liệu cho cột {j+1}'):
+                    for i in range(rows):
+                        if j == 0:
+                            data.iloc[i, j] = st.number_input(f'Nhập giá trị tại hàng {i+1}, cột {j+1}:', key=f'{i}_{j}')
+                        else:
+                            data.iloc[i, j] = st.number_input(f'Nhập tần suất tại hàng {i+1}, cột {j+1}:', key=f'{i}_{j}', min_value=0)
+        
+        # Tạo danh sách để lưu kết quả phân tách theo từng cột
+        expanded_lists = {col: [] for col in column_names[1:]}
+        
+        # Lặp qua từng hàng trong DataFrame
+        for index, row in data.iterrows():
+            
+            # Lặp qua các cột tần suất
+            for col in column_names[1:]:  # Bỏ qua cột đầu tiên "Giá trị"
+                
+                # Chỉ mở rộng danh sách nếu giá trị tần suất không phải NaN và là số nguyên không âm
+                if pd.notna(row[col]) and row[col] > 0:
+                    expanded_lists[col].extend([row['Giá trị']] * int(row[col]))
+                    
+        # Kiểm tra xem có bất kỳ danh sách nào không rỗng
+        if any(expanded_lists.values()):
+            expanded_df = pd.concat({col: pd.Series(expanded_list) for col, expanded_list in expanded_lists.items()}, axis=1)
+
+            # Tính toán thống kê mô tả cho từng cột và lưu kết quả vào danh sách
+            stats_results = []
+            
+            for col in expanded_df.columns:
+                stats_result = all.descriptive_stats(expanded_df[col])
+                stats_result['column'] = col  # Thêm tên cột vào kết quả
+                stats_results.append(stats_result)
+        
+            # Tạo DataFrame từ danh sách kết quả thống kê
+            stats_df = pd.DataFrame(stats_results).set_index('column')
+            
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write(data)
+        with col2:
+            st.write(stats_df.T)   
+        return 
