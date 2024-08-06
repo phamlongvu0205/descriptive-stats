@@ -95,7 +95,7 @@ class all:
                 with st.expander(f'Nhập dữ liệu cho cột {j+1}'):
                     for i in range(rows):
                         if j == 0:
-                            data.iloc[i, j] = st.number_input(f'Nhập giá trị tại hàng {i+1}, cột {j+1}:', key=f'{i}_{j}')
+                            data.iloc[i, j] = st.number_input(f'Nhập giá trị tại hàng {i+1}, cột {j+1}:', key=f'{i}_{j}', min_value=0)
                         else:
                             data.iloc[i, j] = st.number_input(f'Nhập tần suất tại hàng {i+1}, cột {j+1}:', key=f'{i}_{j}', min_value=0)
         
@@ -112,6 +112,9 @@ class all:
                 if pd.notna(row[col]) and row[col] > 0:
                     expanded_lists[col].extend([row['Giá trị']] * int(row[col]))
                     
+        # Initialize stats_df to avoid UnboundLocalError
+        stats_df = pd.DataFrame()
+        
         # Kiểm tra xem có bất kỳ danh sách nào không rỗng
         if any(expanded_lists.values()):
             expanded_df = pd.concat({col: pd.Series(expanded_list) for col, expanded_list in expanded_lists.items()}, axis=1)
@@ -126,10 +129,16 @@ class all:
         
             # Tạo DataFrame từ danh sách kết quả thống kê
             stats_df = pd.DataFrame(stats_results).set_index('column')
-            
+        else:
+            st.warning("Chưa có dữ liệu để tính toán thống kê mô tả.")
+        
         col1, col2 = st.columns(2)
         with col1:
             st.write(data)
         with col2:
-            st.write(stats_df.T)   
-        return 
+            if not stats_df.empty:
+                st.write(stats_df.T)
+            else:
+                st.write("Không có kết quả thống kê để hiển thị.")
+        
+        return
