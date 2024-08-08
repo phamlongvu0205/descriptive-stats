@@ -39,6 +39,9 @@ class all:
             '50%': desc_stats.loc['50%'],
             '75%': desc_stats.loc['75%'],
             'cv': str(round(stats.variation(df) * 100, 2)) + "%",
+            'Position Q1': ((25/100)*(desc_stats.loc['count']+1)),
+            'Position Q2': ((50/100)*(desc_stats.loc['count']+1)),
+            'Position Q3': ((75/100)*(desc_stats.loc['count']+1))
         }
         
     @staticmethod
